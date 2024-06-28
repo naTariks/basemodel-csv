@@ -3,8 +3,6 @@
 Pydantic CSV makes working with CSV files easier and much better than working with Dicts. It uses pydantic BaseModels to store data of every row on the CSV file and also uses type annotations which enables proper type checking and validation.
 
 ## Table of Contents
-
-___
 - [Main features](#main-features)
 - [Installation](#installation)
 - [Getting started](#getting-started)
@@ -18,8 +16,6 @@ ___
     + [Modifying the CSV header](#modifying-the-csv-header)
 - [Copyright and License](#copyright-and-license)
 - [Credits](#credits)
-
-___
 
 ## Main features
 
