@@ -1,0 +1,51 @@
+repos:
+  # update certain features to python 3.9 features
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.16.0
+    hooks:
+      - id: pyupgrade
+        args:
+          - --py39-plus
+          - --keep-runtime-typing
+
+  # useful pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-ast
+      - id: check-yaml
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  # import statement sorter
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: isort (python)
+        args:
+          - --profile=black
+
+  # code formatter
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        args:
+          - --line-length=120
+          - --target-version=py39
+
+  # code quality analysis
+  - repo: https://github.com/PyCQA/pylint
+    rev: v3.2.4
+    hooks:
+      - id: pylint
+        name: pylint
+        args:
+          - --disable=E0401
+          - --disable=too-many-arguments
+          - --disable=too-few-public-methods
+          - --max-line-length=120
+          - --recursive=y
+          - --ignore-paths=venv*,tests*

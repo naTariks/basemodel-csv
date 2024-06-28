@@ -3,9 +3,6 @@
 I love to work together with people so if you have an excellent idea for a feature, improvements or maybe you found
 a bug. Please, don't hesitate in adding an issue, so we can discuss and find a good solution together.
 
-If you never participated in any open-source project before it is even better! I can help you through the process. The
-important thing is to get more people involved in the Python community. So, don't be shy!
-
 ## Getting started
 
 The best way to get started is to look at the issues section and see if the bug or feature you are planning to work with
@@ -52,9 +49,10 @@ If you get an issue to work on, then you can:
 ## Before you submit a pull request
 
 - Make sure to add unit tests (if applicable)
-- Make sure all tests are passing
-- Run a code formatter. This project uses black, you can run the command: `black -l79 -N -S ./dataclass_csv`
+- Make sure all tests are passing (Note that the CSV files have to use \r\n as newline)
+- Run a code formatter. This project uses black, you can run the command: `black -l 120 -t py39 ./pydantic_csv`
 - Add docstrings for new functions and classes.
+- Make sure you follow the [PEP 8](https://pep8.org/) Style Guide (run the pre-commit)
 
 
 

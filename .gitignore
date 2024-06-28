@@ -1,7 +1,28 @@
-__pycache__
-*.pyc
-.idea
+# Environments
+.env
+.venv
 env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Cache
+**/__pycache__
+.dccache
+
+# PyCharm
+.idea/*
+
+# Visual Studio Code
+.vscode/*
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+# other
+*.pyc
 *.swo
 *.swp
 *.*~
@@ -15,7 +36,5 @@ docs
 build
 dist
 .eggs
-.vscode
 gmon.out
 .vim
-pyproject.toml

@@ -1,0 +1,4 @@
+id,firstname,lastname,birthday,signed_up,lastname
+13,Emily,,1991-10-12,True,Johnson
+14,Benjamin,,1986-03-29,False,Adams
+15,Olivia,,2000-08-03,True,Anderson

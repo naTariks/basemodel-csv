@@ -2,14 +2,12 @@
 
 ## Development Lead
 
-* Daniel Furtado <daniel@dfurtado.com>
+* Nathan Richard <contact@nathanrichard.dev>
 
 ## Contributors
 
-* Nick Schober
-* Zoltan Ivanfi
-* Alec Benzer
-* Clint Byrum
-* @johnthangen
+* Be the first to contribute to this repo
 
-See complete list at: https://github.com/dfurtado/dataclass-csv/graphs/contributors
+## Special Thanks
+* Daniel Furtado ([github](https://github.com/dfurtado)) and his python package 'dataclass-csv' ([pypi](https://pypi.org/project/dataclass-csv/) | [github](https://github.com/dfurtado/dataclass-csv)). The most of the Codebase and Documentation is from him and just adjusted for using pydantic.BaseModel.
+* Daniel Seifert ([github](https://github.com/dfseifert)) for the guidance with building a pyproject and reviewing my code <3
