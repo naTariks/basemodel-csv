@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pydantic-csv"
 version = "0.1.0"
-description = ""
+description = "convert CSV to pydantic.BaseModel and vice versa"
 authors = ["Nathan Richard <contact@nathanrichard.dev>"]
 license = "LICENSE"
 readme = "README.md"
