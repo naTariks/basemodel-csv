@@ -3,6 +3,7 @@ module containing the BasemodelCSVWriter Class to write from instances of a Base
 """
 
 import csv
+from collections.abc import Iterable
 from typing import Any
 
 import pydantic
@@ -19,7 +20,7 @@ class BasemodelCSVWriter:
     def __init__(
         self,
         file_obj: Any,
-        data: list[Any],
+        data: Iterable,
         model: type[BaseModel],
         *,
         use_alias: bool = True,
@@ -29,8 +30,11 @@ class BasemodelCSVWriter:
         if not file_obj:
             raise ValueError("The 'file_obj' argument is required")
 
-        if not isinstance(data, list):
-            raise ValueError("Invalid 'data' argument. It must be a list")
+        if not isinstance(data, Iterable) or isinstance(data, (str, BaseModel)):
+            raise ValueError(
+                "Invalid 'data' argument. It must be an Iterable which can hold multiple BaseModel "
+                "instances. eg: list, generator, tuple"
+            )
 
         if model is None or not issubclass(model, pydantic.BaseModel):
             raise ValueError("Invalid 'cls' argument. It must be a pydantic BaseModel")

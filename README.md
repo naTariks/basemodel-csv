@@ -31,7 +31,7 @@ ___
 - Familiar syntax. The `BasemodelCSVReader` is used almost the same way as the `DictReader` in the standard library.
 - It uses `BaseModel` features that let you define Field properties or Config so the data can be parsed exactly the way you want.
 - Make the code cleaner. No more extra loops to convert data to the correct type, perform validation, set default values, the `BasemodelCSVReader` will do all this for you.
-- In addition to the `BasemodelCSVReader`, the library also provides a `BasemodelCSVWriter` which enables creating a CSV file using a list of instances of a BaseModel.
+- In addition to the `BasemodelCSVReader`, the library also provides a `BasemodelCSVWriter` which enables creating a CSV file using an Iterable with instances of a BaseModel.
 - Because [sqlmodel](https://github.com/tiangolo/sqlmodel) uses pydantic.BaseModels too, you can directly fill a database with data from a CSV
 
 
@@ -298,7 +298,7 @@ class User(BaseModel):
     age: int
 ```
 
-And in your program we have a list of users:
+And in your program we have a list (also supports Generator and Tuples. Just any Iterable that supports storing Objects) of users:
 
 ```python
 users = [
