@@ -4,7 +4,7 @@ import pytest
 
 from pydantic_csv import BasemodelCSVWriter
 
-from .models import NonBaseModelUser, SimpleUser, User
+from .models import ExcludedPassword, NonBaseModelUser, SimpleUser, User
 
 
 def test_create_csv_file(users_as_csv_buffer, users_from_csv):
@@ -50,3 +50,13 @@ def test_with_wrong_type_in_list(user_list):
 
 def test_header_mapping(users_mapped_as_csv_buffer, users_mapped_from_csv):
     assert users_mapped_as_csv_buffer == users_mapped_from_csv
+
+
+def test_excluded_field():
+    output = io.StringIO()
+    user = ExcludedPassword()
+
+    w = BasemodelCSVWriter(output, [user], ExcludedPassword)
+    w.write()
+
+    assert output.getvalue() == "username\r\nWagstaff\r\n"

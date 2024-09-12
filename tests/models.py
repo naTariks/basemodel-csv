@@ -51,3 +51,8 @@ class LotsOfDates(pydantic.BaseModel):
     @pydantic.field_validator("end", mode="before")
     def parse_end_date(cls, value):
         return datetime.strptime(value, "%d.%m.%Y").date()
+
+
+class ExcludedPassword(pydantic.BaseModel):
+    username: str = "Wagstaff"
+    password: str = Field(default="swordfish", exclude=True)
