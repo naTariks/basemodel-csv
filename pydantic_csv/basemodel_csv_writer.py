@@ -43,10 +43,12 @@ class BasemodelCSVWriter:
         self._model = model
         self._field_mapping: dict[str, str] = {}
 
+        fields = {name: field for name, field in self._model.model_fields.items() if not (field.exclude or False)}
+
         if use_alias:
-            self._fieldnames = [field.alias or name for name, field in self._model.model_fields.items()]
+            self._fieldnames = [field.alias or name for name, field in fields.items()]
         else:
-            self._fieldnames = model.model_fields.keys()
+            self._fieldnames = fields.keys()
 
         self._writer = csv.writer(file_obj, dialect=dialect, **kwargs)
 
