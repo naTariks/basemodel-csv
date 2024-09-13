@@ -4,7 +4,14 @@ import pytest
 
 from pydantic_csv import BasemodelCSVWriter
 
-from .models import ExcludedPassword, NonBaseModelUser, SimpleUser, User
+from .models import (
+    ComputedPropertyField,
+    ComputedPropertyWithAlias,
+    ExcludedPassword,
+    NonBaseModelUser,
+    SimpleUser,
+    User,
+)
 
 
 def test_create_csv_file(users_as_csv_buffer, users_from_csv):
@@ -60,3 +67,22 @@ def test_excluded_field():
     w.write()
 
     assert output.getvalue() == "username\r\nWagstaff\r\n"
+
+
+@pytest.mark.parametrize(
+    ("model", "use_alias", "expected_output"),
+    [
+        (ComputedPropertyField, True, "username,email\r\nGroucho,groucho@marx.bros\r\n"),
+        (ComputedPropertyWithAlias, True, "username,e\r\nHarpo,harpo@marx.bros\r\n"),
+        (ComputedPropertyField, False, "username,email\r\nGroucho,groucho@marx.bros\r\n"),
+        (ComputedPropertyWithAlias, False, "username,email\r\nHarpo,harpo@marx.bros\r\n"),
+    ],
+)
+def test_computed_property_included(model, use_alias, expected_output):
+    output = io.StringIO()
+    user = model()
+
+    w = BasemodelCSVWriter(output, [user], model, use_alias=use_alias)
+    w.write()
+
+    assert output.getvalue() == expected_output
