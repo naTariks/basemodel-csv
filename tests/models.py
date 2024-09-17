@@ -56,6 +56,7 @@ class LotsOfDates(pydantic.BaseModel):
 class ExcludedPassword(pydantic.BaseModel):
     username: str = "Wagstaff"
     password: str = Field(default="swordfish", exclude=True)
+    email: str = Field(default="wagstaff@marx.bros", serialization_alias="contact")
 
 
 class ComputedPropertyField(pydantic.BaseModel):

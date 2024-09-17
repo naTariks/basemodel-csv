@@ -66,7 +66,7 @@ def test_excluded_field():
     w = BasemodelCSVWriter(output, [user], ExcludedPassword)
     w.write()
 
-    assert output.getvalue() == "username\r\nWagstaff\r\n"
+    assert output.getvalue() == "username,contact\r\nWagstaff,wagstaff@marx.bros\r\n"
 
 
 @pytest.mark.parametrize(

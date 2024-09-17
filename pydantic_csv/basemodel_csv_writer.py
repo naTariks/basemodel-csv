@@ -53,7 +53,9 @@ class BasemodelCSVWriter:
         self._use_alias = use_alias
 
         if self._use_alias:
-            self._fieldnames = [field.alias or name for name, field in fields.items()]
+            self._fieldnames = [
+                field.alias or getattr(field, "serialization_alias", None) or name for name, field in fields.items()
+            ]
         else:
             self._fieldnames = fields.keys()
 
