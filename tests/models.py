@@ -2,7 +2,7 @@ from datetime import date, datetime
 from typing import Optional
 
 import pydantic
-from pydantic import Field
+from pydantic import Field, computed_field
 
 
 class User(pydantic.BaseModel):
@@ -51,3 +51,25 @@ class LotsOfDates(pydantic.BaseModel):
     @pydantic.field_validator("end", mode="before")
     def parse_end_date(cls, value):
         return datetime.strptime(value, "%d.%m.%Y").date()
+
+
+class ExcludedPassword(pydantic.BaseModel):
+    username: str = "Wagstaff"
+    password: str = Field(default="swordfish", exclude=True)
+    email: str = Field(default="wagstaff@marx.bros", serialization_alias="contact")
+
+
+class ComputedPropertyField(pydantic.BaseModel):
+    username: str = "Groucho"
+
+    @computed_field
+    def email(self) -> str:
+        return f"{self.username.lower()}@marx.bros"
+
+
+class ComputedPropertyWithAlias(pydantic.BaseModel):
+    username: str = "Harpo"
+
+    @computed_field(alias="e")
+    def email(self) -> str:
+        return f"{self.username.lower()}@marx.bros"

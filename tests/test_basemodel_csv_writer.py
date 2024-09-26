@@ -4,7 +4,14 @@ import pytest
 
 from pydantic_csv import BasemodelCSVWriter
 
-from .models import NonBaseModelUser, SimpleUser, User
+from .models import (
+    ComputedPropertyField,
+    ComputedPropertyWithAlias,
+    ExcludedPassword,
+    NonBaseModelUser,
+    SimpleUser,
+    User,
+)
 
 
 def test_create_csv_file(users_as_csv_buffer, users_from_csv):
@@ -50,3 +57,32 @@ def test_with_wrong_type_in_list(user_list):
 
 def test_header_mapping(users_mapped_as_csv_buffer, users_mapped_from_csv):
     assert users_mapped_as_csv_buffer == users_mapped_from_csv
+
+
+def test_excluded_field():
+    output = io.StringIO()
+    user = ExcludedPassword()
+
+    w = BasemodelCSVWriter(output, [user], ExcludedPassword)
+    w.write()
+
+    assert output.getvalue() == "username,contact\r\nWagstaff,wagstaff@marx.bros\r\n"
+
+
+@pytest.mark.parametrize(
+    ("model", "use_alias", "expected_output"),
+    [
+        (ComputedPropertyField, True, "username,email\r\nGroucho,groucho@marx.bros\r\n"),
+        (ComputedPropertyWithAlias, True, "username,e\r\nHarpo,harpo@marx.bros\r\n"),
+        (ComputedPropertyField, False, "username,email\r\nGroucho,groucho@marx.bros\r\n"),
+        (ComputedPropertyWithAlias, False, "username,email\r\nHarpo,harpo@marx.bros\r\n"),
+    ],
+)
+def test_computed_property_included(model, use_alias, expected_output):
+    output = io.StringIO()
+    user = model()
+
+    w = BasemodelCSVWriter(output, [user], model, use_alias=use_alias)
+    w.write()
+
+    assert output.getvalue() == expected_output

@@ -4,6 +4,7 @@ module containing the BasemodelCSVWriter Class to write from instances of a Base
 
 import csv
 from collections.abc import Iterable
+from itertools import chain
 from typing import Any
 
 import pydantic
@@ -43,22 +44,32 @@ class BasemodelCSVWriter:
         self._model = model
         self._field_mapping: dict[str, str] = {}
 
-        if use_alias:
-            self._fieldnames = [field.alias or name for name, field in self._model.model_fields.items()]
-        else:
-            self._fieldnames = model.model_fields.keys()
+        fields = {
+            name: field
+            for name, field in chain(self._model.model_fields.items(), self._model.model_computed_fields.items())
+            if not (getattr(field, "exclude", False) or False)
+        }
 
-        self._writer = csv.writer(file_obj, dialect=dialect, **kwargs)
+        self._use_alias = use_alias
+
+        if self._use_alias:
+            self._fieldnames = [
+                field.alias or getattr(field, "serialization_alias", None) or name for name, field in fields.items()
+            ]
+        else:
+            self._fieldnames = fields.keys()
+
+        self._writer = csv.DictWriter(file_obj, self._fieldnames, dialect=dialect, **kwargs)
 
     def _add_to_mapping(self, header: str, fieldname: str) -> None:
         self._field_mapping[fieldname] = header
 
-    def _apply_mapping(self) -> list[str]:
-        mapped_fields = []
+    def _apply_mapping(self) -> dict[str, str]:
+        mapped_fields = {}
 
         for field in self._fieldnames:
             mapped_item = self._field_mapping.get(field, field)
-            mapped_fields.append(mapped_item)
+            mapped_fields[field] = mapped_item
 
         return mapped_fields
 
@@ -73,11 +84,12 @@ class BasemodelCSVWriter:
         Returns:
             None: well, nothing
         """
+
         if not skip_header:
             if self._field_mapping:
-                self._fieldnames = self._apply_mapping()
-
-            self._writer.writerow(self._fieldnames)
+                self._writer.writerow(self._apply_mapping())
+            else:
+                self._writer.writeheader()
 
         for item in self._data:
             if not isinstance(item, self._model):
@@ -86,7 +98,7 @@ class BasemodelCSVWriter:
                     f"{self._model.__name__}. All items on the list must be "
                     "instances of the same type"
                 )
-            row = item.model_dump().values()
+            row = item.model_dump(by_alias=self._use_alias)
             self._writer.writerow(row)
 
     def map(self, fieldname: str) -> HeaderMapper:
